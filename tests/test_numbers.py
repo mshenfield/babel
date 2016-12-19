@@ -279,6 +279,8 @@ def test_format_percent():
             == u'2\xa0512\xa0%')
     assert (numbers.format_percent(25.1234, u'#,##0\u2030', locale='en_US')
             == u'25,123\u2030')
+    assert (numbers.format_percent(0.00532, locale='en_US', force_frac=(0, 2))
+            == u'0.53%')
 
 
 def test_scientific_exponent_displayed_as_integer():

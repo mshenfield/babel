@@ -337,7 +337,7 @@ def format_currency(number, currency, format=None, locale=LC_NUMERIC,
     return pattern.apply(number, locale, currency=currency, force_frac=frac)
 
 
-def format_percent(number, format=None, locale=LC_NUMERIC):
+def format_percent(number, format=None, locale=LC_NUMERIC, force_frac=None):
     """Return formatted percent value for a specific locale.
 
     >>> format_percent(0.34, locale='en_US')
@@ -352,15 +352,23 @@ def format_percent(number, format=None, locale=LC_NUMERIC):
     >>> format_percent(25.1234, u'#,##0\u2030', locale='en_US')
     u'25,123\u2030'
 
+    In addition, you can override the fractional precision of the formatted value:
+
+    >>> format_percent(0.00532, locale='en_US', force_frac=(0, 2))
+    u'0.53%'
+
     :param number: the percent number to format
     :param format:
     :param locale: the `Locale` object or locale identifier
+    :param force_frac: Two valued tuple indicating the precision of the formatted value. The first tuple item indicates
+    the number of digits in the decimal, with 0 being unlimited.  The second tuple item indicates the number of
+    digits allowed after the decimal before rounding.  This will overrule the precision in `format` if provided.
     """
     locale = Locale.parse(locale)
     if not format:
         format = locale.percent_formats.get(format)
     pattern = parse_pattern(format)
-    return pattern.apply(number, locale)
+    return pattern.apply(number, locale, force_frac=force_frac)
 
 
 def format_scientific(number, format=None, locale=LC_NUMERIC):
